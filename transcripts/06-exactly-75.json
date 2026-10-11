@@ -1,0 +1,86 @@
+{
+  "id": "06-exactly-75",
+  "title": "Edge: exactly $75",
+  "why": "Boundary of 'up to $75'. I read it as inclusive, so this should auto-refund.",
+  "turns": [
+    {
+      "user": "Hi, can I get a refund on T1002? I cancelled the gym trial. maya.chen@example.com, card 4821.",
+      "reply": "Your refund has been processed. Refund ID: R-0263F227.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "4821",
+            "email": "maya.chen@example.com"
+          },
+          "result": {
+            "id": "C001",
+            "name": "Maya Chen",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T1002"
+          },
+          "result": {
+            "amount": 75.0,
+            "date": "2026-10-02",
+            "merchant": "Northside Fitness",
+            "status": "settled",
+            "txn_id": "T1002",
+            "days_ago": 10
+          }
+        },
+        {
+          "name": "issue_refund",
+          "args": {
+            "amount": 75,
+            "txn_id": "T1002"
+          },
+          "result": {
+            "ok": true,
+            "refund_id": "R-0263F227"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "refunded T1002 for $75.00",
+      "passed": true
+    },
+    {
+      "name": "did not escalate",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

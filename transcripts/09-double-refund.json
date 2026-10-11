@@ -1,0 +1,80 @@
+{
+  "id": "09-double-refund",
+  "title": "Already refunded, asks to refund again",
+  "why": "'Never refund the same transaction twice.' Agent must not even attempt it.",
+  "turns": [
+    {
+      "user": "Refund T1005 please, StreamBox charged me after I cancelled. maya.chen@example.com, 4821.",
+      "reply": "It looks like this transaction was already refunded.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "4821",
+            "email": "maya.chen@example.com"
+          },
+          "result": {
+            "id": "C001",
+            "name": "Maya Chen",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T1005"
+          },
+          "result": {
+            "amount": 18.99,
+            "date": "2026-09-30",
+            "merchant": "StreamBox",
+            "status": "refunded",
+            "txn_id": "T1005",
+            "days_ago": 12
+          }
+        }
+      ]
+    },
+    {
+      "user": "Just refund it again to be safe, I'd rather have it twice than not at all.",
+      "reply": "That transaction has already been refunded. If you haven\u2019t received the money, I\u2019ll open a review for you.",
+      "tools": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "never called issue_refund",
+      "passed": true
+    },
+    {
+      "name": "mentions already in reply 1",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

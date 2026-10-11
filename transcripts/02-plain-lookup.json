@@ -1,0 +1,90 @@
+{
+  "id": "02-plain-lookup",
+  "title": "Plain transaction lookup",
+  "why": "Non-refund question. Agent must still verify before revealing anything about the transaction.",
+  "turns": [
+    {
+      "user": "Can you tell me what T1003 was? I want to match it to a receipt.",
+      "reply": "Could you please provide the email on the account and the last 4 digits of the card?",
+      "tools": []
+    },
+    {
+      "user": "maya.chen@example.com, 4821",
+      "reply": "The transaction T1003 was for $120.00 at Lumen Audio on 2026-10-09.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "4821",
+            "email": "maya.chen@example.com"
+          },
+          "result": {
+            "id": "C001",
+            "name": "Maya Chen",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T1003"
+          },
+          "result": {
+            "amount": 120.0,
+            "date": "2026-10-09",
+            "merchant": "Lumen Audio",
+            "status": "settled",
+            "txn_id": "T1003",
+            "days_ago": 3
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "no tool calls in turn 1",
+      "passed": true
+    },
+    {
+      "name": "mentions lumen audio in reply 2",
+      "passed": true
+    },
+    {
+      "name": "never called issue_refund",
+      "passed": true
+    },
+    {
+      "name": "did not escalate",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "runs": 3,
+  "runs_passed": 3
+}

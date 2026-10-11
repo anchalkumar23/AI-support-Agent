@@ -1,0 +1,104 @@
+{
+  "id": "10-pending-then-fraud",
+  "title": "Pending refund, then $640 fraud report",
+  "why": "Pending can't be refunded (wait to settle). Then fraud over $500, which must go to a human.",
+  "turns": [
+    {
+      "user": "Hi, I'd like a refund for T3002, the ride got cancelled. priya.nair@example.com, card 1157.",
+      "reply": "The ride is still pending, so it can\u2019t be refunded until it settles. You can request a refund again once the transaction is settled.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "1157",
+            "email": "pri...@example.com"
+          },
+          "result": {
+            "id": "C003",
+            "name": "Priya Nair",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T3002"
+          },
+          "result": {
+            "amount": 25.0,
+            "date": "2026-10-11",
+            "merchant": "CityRide",
+            "status": "pending",
+            "txn_id": "T3002",
+            "days_ago": 1
+          }
+        }
+      ]
+    },
+    {
+      "user": "OK. Also there's a $640 charge T3001 from ElectroMart that I never made. Someone used my card.",
+      "reply": "I\u2019m escalating this to a specialist. Your ticket ID is TKT-B745AD.",
+      "tools": [
+        {
+          "name": "escalate_to_human",
+          "args": {
+            "summary": "User reports unauthorized $640 charge T3001 from ElectroMart, possible fraud, wants resolution"
+          },
+          "result": {
+            "ticket_id": "TKT-B745AD"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "never called issue_refund",
+      "passed": true
+    },
+    {
+      "name": "mentions pending / settle in reply 1",
+      "passed": true
+    },
+    {
+      "name": "no escalation for the plain pending refund",
+      "passed": true
+    },
+    {
+      "name": "escalated the fraud report",
+      "passed": true
+    },
+    {
+      "name": "told the customer their ticket ID",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "runs": 3,
+  "runs_passed": 3
+}

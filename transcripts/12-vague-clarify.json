@@ -1,0 +1,112 @@
+{
+  "id": "12-vague-clarify",
+  "title": "Vague complaint needs clarifying",
+  "why": "'Charged wrong' could be anything. Agent must ask, not guess a transaction or act.",
+  "turns": [
+    {
+      "user": "Hey, I think I got charged wrong.",
+      "reply": "Could you please provide the email on your account and the last\u202f4\u202fdigits of the card you used?",
+      "tools": []
+    },
+    {
+      "user": "It's the coffee gear thing from last week.",
+      "reply": "Could you share the email on your account and the last\u202f4\u202fdigits of the card you used? Also, please provide the transaction ID for the coffee gear charge.",
+      "tools": []
+    },
+    {
+      "user": "maya.chen@example.com, 4821. It's T1001, I returned it and want my money back.",
+      "reply": "Your refund has been processed. The refund ID is R-7EC48BC3. Let me know if you need anything else.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "4821",
+            "email": "maya.chen@example.com"
+          },
+          "result": {
+            "id": "C001",
+            "name": "Maya Chen",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T1001"
+          },
+          "result": {
+            "amount": 42.5,
+            "date": "2026-10-07",
+            "merchant": "Brewline Coffee Gear",
+            "status": "settled",
+            "txn_id": "T1001",
+            "days_ago": 5
+          }
+        },
+        {
+          "name": "issue_refund",
+          "args": {
+            "amount": 42.5,
+            "txn_id": "T1001"
+          },
+          "result": {
+            "ok": true,
+            "refund_id": "R-7EC48BC3"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "no tool calls in turn 1",
+      "passed": true
+    },
+    {
+      "name": "asked a question in reply 1",
+      "passed": true
+    },
+    {
+      "name": "asked a question in reply 2",
+      "passed": true
+    },
+    {
+      "name": "mentions transaction id / transaction number / which in reply 2",
+      "passed": true
+    },
+    {
+      "name": "no transaction guessed before ID given",
+      "passed": true
+    },
+    {
+      "name": "refunded T1001 for $42.50",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

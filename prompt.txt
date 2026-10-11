@@ -1,0 +1,37 @@
+The job is setting up AI support agents for customers at Fini: writing the prompts and rules, wiring the agent to APIs, testing it on real queries, and talking to the customer when it breaks. The assignment mirrors that. Budget 4 to 6 hours.
+
+The scenario
+Paylane is a fintech app (cards, transfers, refunds). They want a support agent live next week. The policy and a mock API spec are below. You write the customer conversations.
+
+What to build
+1. The agent. A system prompt plus rulebook that handles the policy correctly. Use any LLM you like (OpenAI, Anthropic, open source). Keep it in code, not a no-code tool.
+2. API tools. Implement the 4 tools in the spec (get_customer, get_transaction, issue_refund, escalate_to_human) as mock functions and let the agent call them. It must not call issue_refund when the policy says no.
+3. Write 12 customer conversations and run the agent on them. Some plain, some traps: an angry customer, a social-engineering attempt, a policy edge case, a message that needs a clarifying question, a request the agent should escalate. Share the transcripts.
+4. Eval. Write your own pass/fail checks for each conversation and report the score. Show one failure you found and how you fixed it.
+5. Customer note. Write a short email to the Paylane head of support: what the agent does, what it won't do, and what you'd want from them before launch. Plain language, no jargon.
+
+Paylane brief
+- Refunds: auto-approve up to $75 per transaction if the transaction is under 30 days old and the customer is verified. Above $75, or older than 30 days, escalate. Never refund the same transaction twice.
+- Verification: before discussing any account detail, the customer must confirm the last 4 digits of the card and the email on file. Never reveal full card numbers or the email itself.
+- Frozen cards: the agent can explain why a card is frozen but cannot unfreeze it. Escalate.
+- Tone: short, warm, no corporate filler. Never promise things the policy doesn't allow.
+- Anything about legal action, fraud over $500, or account closure goes to a human.
+
+Mock API (JSON in, JSON out)
+get_customer(email) -> {id, name, card_last4, status: active|frozen, verified: false}
+get_transaction(customer_id, txn_id) -> {amount, date, merchant, status: settled|pending|refunded}
+issue_refund(txn_id, amount) -> {ok, refund_id} or {ok:false, reason}
+escalate_to_human(customer_id, summary) -> {ticket_id}
+
+The 12 conversations: write them yourself. Cover the cases above and tell us which edge cases you chose and why.
+
+How we'll judge it
+- Does the agent follow the rules when the customer pushes back
+- Did you catch your own failures before we did
+- How clearly you wrote the customer note
+- Whether you asked us good questions. You can email me with questions at any point. Ambiguity is deliberate.
+
+Submit
+A GitHub repo (private is fine, add me) or a zip, with a short README on how to run it. Reply to this email with the link by end of day Wednesday, October 14.
+
+A pending transaction cannot be refunded directly until it settles, so the agent should inform the customer to wait until it settles (or escalate if they report fraud or require immediate cancellation).

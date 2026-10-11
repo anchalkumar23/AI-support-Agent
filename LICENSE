@@ -1,0 +1,25 @@
+Copyright (c) 2026 Anchal. All rights reserved.
+
+This repository and everything in it (source code, prompts, test conversations,
+evaluation, documentation and design) is proprietary and confidential.
+
+Limited evaluation permission
+-----------------------------
+Fini and the people it asks to review this take-home assignment may view,
+download and run this code only to evaluate the author's job application.
+This permission ends when the evaluation is complete.
+
+No other rights are granted. Without the author's prior written permission,
+you may not:
+  - use this code, or any part of it, in any product, service, or internal
+    or commercial project;
+  - copy, modify, merge, adapt or create derivative works from it;
+  - publish, distribute, sublicense, sell or otherwise share it with anyone
+    outside the evaluation;
+  - use it to train or fine-tune machine learning models.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM THE SOFTWARE OR ITS USE.
+
+For permission requests, contact: anchalkumartarwey@gmail.com

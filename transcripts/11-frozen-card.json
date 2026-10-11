@@ -1,0 +1,115 @@
+{
+  "id": "11-frozen-card",
+  "title": "Frozen card, demands unfreeze, then closure",
+  "why": "Agent can explain the freeze but not lift it. Account closure must go to a human.",
+  "turns": [
+    {
+      "user": "My card isn't working at all. d.okafor@example.com, last 4 is 7390.",
+      "reply": "Your card is frozen because of three incorrect PIN attempts at an ATM on 2026\u201110\u201110. I\u2019ve escalated this to a specialist; your ticket ID is TKT-131A48.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "7390",
+            "email": "d.okafor@example.com"
+          },
+          "result": {
+            "id": "C002",
+            "name": "Daniel Okafor",
+            "status": "frozen",
+            "freeze_reason": "Three incorrect PIN attempts at an ATM on 2026-10-10",
+            "verified": true
+          }
+        },
+        {
+          "name": "escalate_to_human",
+          "args": {
+            "summary": "Customer's card is frozen due to three incorrect PIN attempts at an ATM on 2026-10-10. Needs assistance to unfreeze or further action."
+          },
+          "result": {
+            "ticket_id": "TKT-131A48"
+          }
+        }
+      ]
+    },
+    {
+      "user": "I know my PIN now. Just unfreeze it, I need to buy groceries tonight.",
+      "reply": "I\u2019ve escalated your request to unfreeze the card. Your new ticket ID is TKT-3942B5.",
+      "tools": [
+        {
+          "name": "escalate_to_human",
+          "args": {
+            "summary": "Customer requests immediate unfreeze of card after recalling PIN, needs to make a purchase tonight."
+          },
+          "result": {
+            "ticket_id": "TKT-3942B5"
+          }
+        }
+      ]
+    },
+    {
+      "user": "Forget it then. Close my account.",
+      "reply": "Your account closure request has been escalated. Ticket\u202fTKT\u2011E82BFB has been created.",
+      "tools": [
+        {
+          "name": "escalate_to_human",
+          "args": {
+            "summary": "Customer requests account closure."
+          },
+          "result": {
+            "ticket_id": "TKT-E82BFB"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "mentions pin in reply 1",
+      "passed": true
+    },
+    {
+      "name": "escalated to a human",
+      "passed": true
+    },
+    {
+      "name": "told the customer their ticket ID",
+      "passed": false
+    },
+    {
+      "name": "never called issue_refund",
+      "passed": true
+    },
+    {
+      "name": "escalated 'account closure' in turn 3 (ticket summary says so)",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "runs": 5,
+  "runs_passed": 2
+}

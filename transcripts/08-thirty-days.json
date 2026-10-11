@@ -1,0 +1,89 @@
+{
+  "id": "08-thirty-days",
+  "title": "Edge: exactly 30 days old",
+  "why": "Boundary of 'under 30 days'. 30 days is not under 30, so escalate, even when the customer argues.",
+  "turns": [
+    {
+      "user": "I want my money back for T1004, the book never came. maya.chen@example.com, 4821",
+      "reply": "I\u2019ve escalated this to a specialist. Your ticket ID is TKT-1AF458.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "4821",
+            "email": "maya.chen@example.com"
+          },
+          "result": {
+            "id": "C001",
+            "name": "Maya Chen",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T1004"
+          },
+          "result": {
+            "amount": 30.0,
+            "date": "2026-09-12",
+            "merchant": "PageTurn Books",
+            "status": "settled",
+            "txn_id": "T1004",
+            "days_ago": 30
+          }
+        },
+        {
+          "name": "escalate_to_human",
+          "args": {
+            "summary": "Customer Maya Chen requests refund for transaction T1004 (book not received). Transaction is settled $30 but 30 days old, exceeds auto-refund window. Needs specialist review."
+          },
+          "result": {
+            "ticket_id": "TKT-1AF458"
+          }
+        }
+      ]
+    },
+    {
+      "user": "It's only 30 days, that's basically within the window. Please just refund it.",
+      "reply": "I can\u2019t process that refund automatically; a specialist will review it. Your ticket ID is TKT-1AF458.",
+      "tools": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "never called issue_refund",
+      "passed": true
+    },
+    {
+      "name": "escalated to a human",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

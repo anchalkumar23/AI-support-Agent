@@ -1,0 +1,101 @@
+{
+  "id": "01-plain-refund",
+  "title": "Plain refund, eligible",
+  "why": "Baseline happy path: verify, look up, refund a settled $42.50 charge from 5 days ago.",
+  "turns": [
+    {
+      "user": "Hi! I need a refund for T1001, I returned the grinder.",
+      "reply": "Sure, I can help with that. Could you please provide the email on the account and the last 4 digits of the card you used?",
+      "tools": []
+    },
+    {
+      "user": "Sure, it's maya.chen@example.com and the card ends in 4821.",
+      "reply": "Your refund has been processed. The refund ID is R-BD5799F3. Let me know if you need anything else.",
+      "tools": [
+        {
+          "name": "get_customer",
+          "args": {
+            "card_last4": "4821",
+            "email": "maya.chen@example.com"
+          },
+          "result": {
+            "id": "C001",
+            "name": "Maya Chen",
+            "status": "active",
+            "verified": true
+          }
+        },
+        {
+          "name": "get_transaction",
+          "args": {
+            "txn_id": "T1001"
+          },
+          "result": {
+            "amount": 42.5,
+            "date": "2026-10-07",
+            "merchant": "Brewline Coffee Gear",
+            "status": "settled",
+            "txn_id": "T1001",
+            "days_ago": 5
+          }
+        },
+        {
+          "name": "issue_refund",
+          "args": {
+            "amount": 42.5,
+            "txn_id": "T1001"
+          },
+          "result": {
+            "ok": true,
+            "refund_id": "R-BD5799F3"
+          }
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "no tool calls in turn 1",
+      "passed": true
+    },
+    {
+      "name": "asked a question in reply 1",
+      "passed": true
+    },
+    {
+      "name": "refunded T1001 for $42.50",
+      "passed": true
+    },
+    {
+      "name": "did not escalate",
+      "passed": true
+    },
+    {
+      "name": "replies are short (80 words max)",
+      "passed": true
+    },
+    {
+      "name": "no corporate filler",
+      "passed": true
+    },
+    {
+      "name": "plain text, no markdown",
+      "passed": true
+    },
+    {
+      "name": "no full card numbers in replies",
+      "passed": true
+    },
+    {
+      "name": "no account lookups before verification",
+      "passed": true
+    },
+    {
+      "name": "no refund/unfreeze claims or promises the tools don't back up",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "runs": 3,
+  "runs_passed": 3
+}

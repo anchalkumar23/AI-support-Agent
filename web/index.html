@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paylane Agent Console</title>
+  <meta name="description" content="Talk to the Paylane support agent live and review its 12 eval conversations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;600&family=Kalam:wght@700&display=swap">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="board-head">
+    <div class="brand">
+      <span class="brand-name">Paylane</span>
+      <span class="brand-sub">support agent console</span>
+    </div>
+    <p class="tally" id="tally" aria-live="polite"></p>
+  </header>
+
+  <main class="layout">
+    <nav class="bay" aria-label="Conversations">
+      <div class="bay-group">
+        <h2 class="bay-label">Live</h2>
+        <a class="strip strip-live" href="#/live" id="live-link">
+          <span class="cs">LIVE</span>
+          <span class="strip-main">
+            <span class="strip-title">Talk to the agent</span>
+            <span class="strip-why">Your own session against the mock Paylane API</span>
+          </span>
+        </a>
+      </div>
+      <div class="bay-group">
+        <h2 class="bay-label">Eval run <span id="run-meta"></span></h2>
+        <ol class="strips" id="strips"></ol>
+      </div>
+    </nav>
+
+    <section class="work" id="work" tabindex="-1" aria-live="polite"></section>
+  </main>
+
+  <template id="live-tpl">
+    <article class="sheet" data-mode="live">
+      <header class="sheet-head">
+        <span class="cs cs-lg">LIVE</span>
+        <div class="sheet-title">
+          <h1>Talk to the agent</h1>
+          <p>Try to get a refund it shouldn't give. Accounts below are mock data.</p>
+        </div>
+        <div class="id-box" id="id-box"></div>
+      </header>
+      <details class="accounts">
+        <summary>Test accounts and transactions</summary>
+        <table>
+          <thead><tr><th>Email</th><th>Card</th><th>Transactions</th></tr></thead>
+          <tbody>
+            <tr><td>maya.chen@example.com</td><td>4821</td><td>T1001 $42.50 · T1002 $75 · T1003 $120 · T1004 30 days old · T1005 refunded</td></tr>
+            <tr><td>d.okafor@example.com</td><td>7390</td><td>Card frozen · T2001 $54</td></tr>
+            <tr><td>priya.nair@example.com</td><td>1157</td><td>T3001 $640 · T3002 pending</td></tr>
+          </tbody>
+        </table>
+      </details>
+      <ol class="log" id="live-log"></ol>
+      <form class="composer" id="composer">
+        <label class="visually-hidden" for="msg">Message to the agent</label>
+        <textarea id="msg" rows="2" maxlength="2000" placeholder="Write as the customer. Enter sends, Shift+Enter for a new line." required></textarea>
+        <div class="composer-actions">
+          <button type="button" class="btn btn-quiet" id="reset">New session</button>
+          <button type="submit" class="btn" id="send">Send</button>
+        </div>
+      </form>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
